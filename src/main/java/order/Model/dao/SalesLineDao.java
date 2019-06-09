@@ -1,4 +1,6 @@
-package order.Model;
+package order.Model.dao;
+
+import order.Model.dto.SalesLineDto;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

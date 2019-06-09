@@ -1,5 +1,6 @@
-package order.Model;
+package order.Model.dao;
 
+import order.Model.dto.SalesHeadDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Component;
@@ -38,8 +39,8 @@ public class SalesHeadDao {
             builder.append( ")                        " );
 
             ps = con.prepareStatement( builder.toString() );
-            ps.setInt( 1, head.getSalesNo() );
-            ps.setString( 2, head.getCustomerName() );
+            //ps.setInt( 1, head.getSalesNo() );
+            //ps.setString( 2, head.getCustomerName() );
             ps.setTimestamp( 3, new Timestamp( System.currentTimeMillis() ) );
 
             ps.executeUpdate();

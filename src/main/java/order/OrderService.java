@@ -1,7 +1,8 @@
 package order;
 
-import order.Model.SalesHeadDao;
-import order.Model.SalesLineDao;
+import order.Model.dao.SalesHeadDao;
+import order.Model.dto.SalesHeadDto;
+import order.Model.dao.SalesLineDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,11 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderService {
 
     @Autowired
-    SalesHeadDao hDao;
-    SalesLineDao lDao;
+    private SalesHeadDao hDao;
+    private SalesLineDao lDao;
 
     @Transactional
-    public void executeOrder(){
+    public void executeOrder(OrderForm form) {
+
+        SalesHeadDto hDto = new SalesHeadDto();
 
     }
 }
