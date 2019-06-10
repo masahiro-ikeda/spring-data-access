@@ -1,19 +1,23 @@
 package order.Model.dao;
 
-import order.Model.dto.SalesLineDto;
-
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceUtils;
+import org.springframework.stereotype.Component;
+
+import order.Model.dto.SalesLineDto;
+
+@Component
 public class SalesLineDao {
-	// データベース接続に必要なデータ
-	private static final String DRIVER_NAME = "oracle.jdbc.driver.OracleDriver";
-	private static final String JDBC_URL = "jdbc:oracle:thin:@localhost:1521:ORCL";
-	private static final String USER_ID = "imuser";
-	private static final String USER_PASS = "impass";
+
+	@Autowired
+	DataSource dataSource;
 
 	/**
 	 * 注文ラインをDBに保存する
@@ -22,17 +26,11 @@ public class SalesLineDao {
 	 */
 	public void insertLine(SalesLineDto line) {
 
-		try {
-			Class.forName(DRIVER_NAME);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-
 		Connection con = null;
 		PreparedStatement ps = null;
 
 		try {
-			con = DriverManager.getConnection(JDBC_URL, USER_ID, USER_PASS);
+			con = DataSourceUtils.getConnection(dataSource);
 
 			StringBuilder builder = new StringBuilder();
 			builder.append("INSERT INTO sales_line ( ");
@@ -64,9 +62,6 @@ public class SalesLineDao {
 			try {
 				if (ps != null) {
 					ps.close();
-				}
-				if (con != null) {
-					con.close();
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();

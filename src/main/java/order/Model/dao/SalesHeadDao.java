@@ -45,8 +45,8 @@ public class SalesHeadDao {
 			builder.append(")                        ");
 
 			ps = con.prepareStatement(builder.toString());
-			//ps.setInt( 1, head.getSalesNo() );
-			//ps.setString( 2, head.getCustomerName() );
+			ps.setInt(1, head.getSalesNo());
+			ps.setString(2, head.getName());
 			ps.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
 
 			ps.executeUpdate();
