@@ -2,22 +2,24 @@ package order;
 
 import java.sql.SQLException;
 
+import order.model.mapper.SalesHeadMapper;
+import order.model.mapper.SalesLineMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import order.Model.dao.SalesHeadDao;
-import order.Model.dao.SalesLineDao;
-import order.Model.dto.SalesHeadDto;
-import order.Model.dto.SalesLineDto;
+import order.model.dao.SalesLineDao;
+import order.model.dto.SalesHeadDto;
+import order.model.dto.SalesLineDto;
 
 @Service
 public class OrderService {
 
 	@Autowired
-	SalesHeadDao hDao;
+	SalesHeadMapper hMapper;
 	@Autowired
-	SalesLineDao lDao;
+	SalesLineMapper lMapper;
 
 	/*
 	 * @Transactionalを使うと、このメソッド内のDB接続処理をトランザクション管理してくれます。
@@ -29,13 +31,13 @@ public class OrderService {
 
 		try {
 			// 売上Noの取得
-			int salesNo = (hDao.getMaxSalesNo() + 1);
+			int salesNo = (hMapper.getMaxSalesNo() + 1);
 
 			// HEADの登録
 			SalesHeadDto hDto = new SalesHeadDto();
 			hDto.setSalesNo(salesNo);
 			hDto.setName(form.getName());
-			hDao.insertHead(hDto);
+			hMapper.insertHead(hDto);
 
 			// LINEの登録①
 			SalesLineDto orderHamburger = new SalesLineDto();
@@ -43,7 +45,7 @@ public class OrderService {
 			orderHamburger.setItemNumber(form.getOrderHamburger());
 			orderHamburger.setSalesNo(salesNo);
 			orderHamburger.setSubNo(1);
-			lDao.insertLine(orderHamburger);
+			lMapper.insertLine(orderHamburger);
 
 			// LINEの登録②
 			SalesLineDto orderPotato = new SalesLineDto();
@@ -51,7 +53,7 @@ public class OrderService {
 			orderPotato.setItemNumber(form.getOrderPotato());
 			orderPotato.setSalesNo(salesNo);
 			orderPotato.setSubNo(2);
-			lDao.insertLine(orderPotato);
+			lMapper.insertLine(orderPotato);
 
 			// LINEの登録③
 			SalesLineDto orderCola = new SalesLineDto();
@@ -59,9 +61,9 @@ public class OrderService {
 			orderCola.setItemNumber(form.getOrderCola());
 			orderCola.setSalesNo(salesNo);
 			orderCola.setSubNo(3);
-			lDao.insertLine(orderCola);
+			lMapper.insertLine(orderCola);
 
-		} catch (SQLException e) {
+		} catch (DataAccessException e) {
 			throw new RuntimeException();
 		}
 	}

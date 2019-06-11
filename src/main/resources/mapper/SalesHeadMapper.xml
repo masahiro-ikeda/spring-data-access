@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="order.model.mapper.SalesHeadMapper">
+    <insert id="insertHead" parameterType="order.model.dto.SalesHeadDto">
+        INSERT INTO sales_head (
+            sales_no,
+            customer_name,
+            created_at
+        ) VALUES (
+            #{salesNo},
+            #{name},
+            #{createdAt}
+        )
+    </insert>
+    <select id="getMaxSalesNo" resultType="int">
+        SELECT
+            MAX(sales_no) AS max_no
+        FROM
+            sales_head
+    </select>
+</mapper>

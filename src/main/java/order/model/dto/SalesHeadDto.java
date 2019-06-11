@@ -1,4 +1,4 @@
-package order.Model.dto;
+package order.model.dto;
 
 import java.sql.Timestamp;
 

@@ -1,4 +1,4 @@
-package order.Model.dao;
+package order.model.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Component;
 
-import order.Model.dto.SalesLineDto;
+import order.model.dto.SalesLineDto;
 
 @Component
 public class SalesLineDao {
