@@ -17,6 +17,7 @@ import order.Model.dto.SalesHeadDto;
 @Component
 public class SalesHeadDao {
 
+	// application.propertiesで設定したデータソースをDIコンテナから取り出す
 	@Autowired
 	DataSource dataSource;
 
@@ -25,89 +26,67 @@ public class SalesHeadDao {
 	 *
 	 * @param head
 	 */
-	public void insertHead(SalesHeadDto head) {
+	public void insertHead(SalesHeadDto head) throws SQLException {
 
-		Connection con = null;
-		PreparedStatement ps = null;
+		// データソースからConnectionを取得
+		// ※この方法でConnectionを取得しないと@Transactionalが効きません
+		Connection con = DataSourceUtils.getConnection(dataSource);
 
-		try {
-			con = DataSourceUtils.getConnection(dataSource);
+		StringBuilder builder = new StringBuilder();
+		builder.append("INSERT INTO sales_head ( ");
+		builder.append("    sales_no,            ");
+		builder.append("    customer_name,       ");
+		builder.append("    created_at           ");
+		builder.append(") VALUES (               ");
+		builder.append("    ?,                   ");
+		builder.append("    ?,                   ");
+		builder.append("    ?                    ");
+		builder.append(")                        ");
 
-			StringBuilder builder = new StringBuilder();
-			builder.append("INSERT INTO sales_head ( ");
-			builder.append("    sales_no,            ");
-			builder.append("    customer_name,       ");
-			builder.append("    created_at           ");
-			builder.append(") VALUES (               ");
-			builder.append("    ?,                   ");
-			builder.append("    ?,                   ");
-			builder.append("    ?                    ");
-			builder.append(")                        ");
+		PreparedStatement ps = con.prepareStatement(builder.toString());
+		int idx = 0;
+		ps.setInt(++idx, head.getSalesNo());
+		ps.setString(++idx, head.getName());
+		ps.setTimestamp(++idx, new Timestamp(System.currentTimeMillis()));
+		ps.executeUpdate();
 
-			ps = con.prepareStatement(builder.toString());
-			ps.setInt(1, head.getSalesNo());
-			ps.setString(2, head.getName());
-			ps.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
-
-			ps.executeUpdate();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (ps != null) {
-					ps.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+		// PreparedStatementをクローズする
+		// Connectionのクローズはフレームワークが行ってくれるので行わない
+		if (ps != null) {
+			ps.close();
 		}
 	}
 
 	/**
-	 * 次の売上Noを発行する
+	 * 売上Noの最大値を発行する
 	 *
-	 * @return 次の売上No
+	 * @return 売上Noの最大値
 	 */
-	public int getNextSalesNo() {
+	public int getMaxSalesNo() throws SQLException {
 
-		Connection con = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
+		int maxNo = 0;
+		Connection con = DataSourceUtils.getConnection(dataSource);
 
-		int nextNo = 0;
-		try {
-			con = DataSourceUtils.getConnection(dataSource);
+		StringBuilder builder = new StringBuilder();
+		builder.append("SELECT                    ");
+		builder.append("  MAX(sales_no) AS max_no ");
+		builder.append("FROM                      ");
+		builder.append("  sales_head              ");
 
-			StringBuilder builder = new StringBuilder();
-			builder.append("SELECT                    ");
-			builder.append("  MAX(sales_no) AS max_no ");
-			builder.append("FROM                      ");
-			builder.append("  sales_head              ");
+		PreparedStatement ps = con.prepareStatement(builder.toString());
+		ResultSet rs = ps.executeQuery();
 
-			ps = con.prepareStatement(builder.toString());
-			rs = ps.executeQuery();
-
-			if (rs.next()) {
-				nextNo = rs.getInt("max_no");
-				nextNo += 1;
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (ps != null) {
-					ps.close();
-				}
-				if (rs != null) {
-					rs.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+		if (rs.next()) {
+			maxNo = rs.getInt("max_no");
 		}
-		return nextNo;
-	}
 
+		if (ps != null) {
+			ps.close();
+		}
+		if (rs != null) {
+			rs.close();
+		}
+
+		return maxNo;
+	}
 }

@@ -24,48 +24,36 @@ public class SalesLineDao {
 	 *
 	 * @param line
 	 */
-	public void insertLine(SalesLineDto line) {
+	public void insertLine(SalesLineDto line) throws SQLException {
 
-		Connection con = null;
-		PreparedStatement ps = null;
+		Connection con = DataSourceUtils.getConnection(dataSource);
 
-		try {
-			con = DataSourceUtils.getConnection(dataSource);
+		StringBuilder builder = new StringBuilder();
+		builder.append("INSERT INTO sales_line ( ");
+		builder.append("    sales_no,            ");
+		builder.append("    sub_no,              ");
+		builder.append("    item,                ");
+		builder.append("    item_number,         ");
+		builder.append("    created_at           ");
+		builder.append(") VALUES (               ");
+		builder.append("    ?,                   ");
+		builder.append("    ?,                   ");
+		builder.append("    ?,                   ");
+		builder.append("    ?,                   ");
+		builder.append("    ?                    ");
+		builder.append(")                        ");
 
-			StringBuilder builder = new StringBuilder();
-			builder.append("INSERT INTO sales_line ( ");
-			builder.append("    sales_no,            ");
-			builder.append("    sub_no,              ");
-			builder.append("    item,                ");
-			builder.append("    item_number,         ");
-			builder.append("    created_at           ");
-			builder.append(") VALUES (               ");
-			builder.append("    ?,                   ");
-			builder.append("    ?,                   ");
-			builder.append("    ?,                   ");
-			builder.append("    ?,                   ");
-			builder.append("    ?                    ");
-			builder.append(")                        ");
+		PreparedStatement ps = con.prepareStatement(builder.toString());
+		int idx = 0;
+		ps.setInt(++idx, line.getSalesNo());
+		ps.setInt(++idx, line.getSubNo());
+		ps.setString(++idx, line.getItem());
+		ps.setInt(++idx, line.getItemNumber());
+		ps.setTimestamp(++idx, new Timestamp(System.currentTimeMillis()));
+		ps.executeUpdate();
 
-			ps = con.prepareStatement(builder.toString());
-			ps.setInt(1, line.getSalesNo());
-			ps.setInt(2, line.getSubNo());
-			ps.setString(3, line.getItem());
-			ps.setInt(4, line.getItemNumber());
-			ps.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
-
-			ps.executeUpdate();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (ps != null) {
-					ps.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+		if (ps != null) {
+			ps.close();
 		}
 	}
 }

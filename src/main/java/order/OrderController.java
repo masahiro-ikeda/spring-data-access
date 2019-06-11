@@ -21,7 +21,11 @@ public class OrderController {
 	@PostMapping("/order")
 	public String postOrder(@ModelAttribute("form") OrderForm order) {
 
-		service.executeOrder(order);
-		return "thanks";
+		try {
+			service.executeOrder(order);
+			return "thanks";
+		} catch (RuntimeException e) {
+			return "error";
+		}
 	}
 }
