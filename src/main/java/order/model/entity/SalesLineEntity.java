@@ -1,8 +1,8 @@
-package order.model.dto;
+package order.model.entity;
 
 import java.sql.Timestamp;
 
-public class SalesLineDto {
+public class SalesLineEntity {
 
 	// 売上No
 	private int salesNo;

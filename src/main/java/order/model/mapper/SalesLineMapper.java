@@ -1,8 +1,10 @@
 package order.model.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
-import order.model.dto.SalesLineDto;
+import order.model.entity.SalesLineEntity;
 
 @Mapper
 public interface SalesLineMapper {
@@ -12,5 +14,12 @@ public interface SalesLineMapper {
 	 *
 	 * @param line
 	 */
-	void insertLine(SalesLineDto line);
+	void insertLine(SalesLineEntity line);
+
+	/**
+	 * 売上ラインデータを全取得
+	 *
+	 * @return 売上ラインの全データ
+	 */
+	List<SalesLineEntity> selectAll();
 }

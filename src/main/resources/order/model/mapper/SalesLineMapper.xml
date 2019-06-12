@@ -3,8 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="order.model.mapper.SalesLineMapper">
-    <insert id="insertLine" parameterType="order.model.dto.SalesLineDto">
-        INSERT INTO sales_line (
+    <insert id="insertLine" parameterType="order.model.entity.SalesLineEntity">
             sales_no,
             sub_no,
             item,
@@ -18,4 +17,17 @@
             #{createdAt}
         )
     </insert>
+    <select id="selectAll" resultType="order.model.entity.SalesLineEntity">
+		SELECT
+			sales_no,
+            sub_no,
+            item,
+            item_number,
+            created_at
+		FROM
+			sales_line
+		ORDER BY
+			sales_no,
+			sub_no
+	</select>
 </mapper>

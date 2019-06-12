@@ -1,13 +1,13 @@
-package order.model.dto;
+package order.model.entity;
 
 import java.sql.Timestamp;
 
-public class SalesHeadDto {
+public class SalesHeadEntity {
 
 	// 売上No
 	private int salesNo;
 	// お客名
-	private String name;
+	private String customerName;
 	// 登録日時
 	private Timestamp createdAt;
 
@@ -19,12 +19,12 @@ public class SalesHeadDto {
 		this.salesNo = salesNo;
 	}
 
-	public String getName() {
-		return name;
+	public String getCustomerName() {
+		return customerName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
 	}
 
 	public Timestamp getCreatedAt() {
@@ -34,4 +34,5 @@ public class SalesHeadDto {
 	public void setCreatedAt(Timestamp createdAt) {
 		this.createdAt = createdAt;
 	}
+
 }

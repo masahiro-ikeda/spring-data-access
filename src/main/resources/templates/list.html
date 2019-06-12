@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>注文一覧</title>
+</head>
+<body>
+	<table>
+		<span th:each="dto:${list}">
+			<span th:each="head:${dto.salesHeadEntity}">
+				<tr th:each="line:${dto.salesLineEntityList}">
+					<td th:text="${head.salesNo}"><td>
+					<td th:text="${head.customerName}"><td>
+					<td th:text="${line.subNo}"><td>
+					<td th:text="${line.item}"><td>
+					<td th:text="${line.itemNumber}"><td>
+					<td th:text="${line.createdAt}"><td>
+				</tr>
+			</span>
+		</span>
+	</table>
+</body>
+</html>

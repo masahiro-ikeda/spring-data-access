@@ -1,14 +1,18 @@
-package order;
+package order.service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import order.model.dto.SalesHeadDto;
-import order.model.dto.SalesLineDto;
+import order.form.OrderForm;
+import order.model.dto.SalesDto;
+import order.model.entity.SalesHeadEntity;
+import order.model.entity.SalesLineEntity;
 import order.model.mapper.SalesHeadMapper;
 import order.model.mapper.SalesLineMapper;
 
@@ -33,14 +37,14 @@ public class OrderService {
 			int salesNo = (hMapper.getMaxSalesNo() + 1);
 
 			// HEADの登録
-			SalesHeadDto hDto = new SalesHeadDto();
+			SalesHeadEntity hDto = new SalesHeadEntity();
 			hDto.setSalesNo(salesNo);
-			hDto.setName(form.getName());
+			hDto.setCustomerName(form.getName());
 			hDto.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 			hMapper.insertHead(hDto);
 
 			// LINEの登録①
-			SalesLineDto orderHamburger = new SalesLineDto();
+			SalesLineEntity orderHamburger = new SalesLineEntity();
 			orderHamburger.setItem("ハンバーガー");
 			orderHamburger.setItemNumber(form.getOrderHamburger());
 			orderHamburger.setSalesNo(salesNo);
@@ -49,7 +53,7 @@ public class OrderService {
 			lMapper.insertLine(orderHamburger);
 
 			// LINEの登録②
-			SalesLineDto orderPotato = new SalesLineDto();
+			SalesLineEntity orderPotato = new SalesLineEntity();
 			orderPotato.setItem("ポテト");
 			orderPotato.setItemNumber(form.getOrderPotato());
 			orderPotato.setSalesNo(salesNo);
@@ -58,7 +62,7 @@ public class OrderService {
 			lMapper.insertLine(orderPotato);
 
 			// LINEの登録③
-			SalesLineDto orderCola = new SalesLineDto();
+			SalesLineEntity orderCola = new SalesLineEntity();
 			orderCola.setItem("コーラ");
 			orderCola.setItemNumber(form.getOrderCola());
 			orderCola.setSalesNo(salesNo);
@@ -69,5 +73,31 @@ public class OrderService {
 		} catch (DataAccessException e) {
 			throw new RuntimeException();
 		}
+	}
+
+	public List<SalesDto> getOrderList() throws RuntimeException {
+
+		List<SalesDto> salesList = new ArrayList<>();
+
+		try {
+			List<SalesHeadEntity> hList = hMapper.selectAll();
+			List<SalesLineEntity> lList = lMapper.selectAll();
+
+			for (SalesHeadEntity head : hList) {
+				SalesDto dto = new SalesDto();
+				dto.setSalesHeadEntity(head);
+
+				for (SalesLineEntity line : lList) {
+					if (head.getSalesNo() == line.getSalesNo()) {
+						dto.setSalesLineEntity(line);
+					}
+				}
+				salesList.add(dto);
+			}
+		} catch (DataAccessException e) {
+			throw new RuntimeException();
+		}
+
+		return salesList;
 	}
 }
