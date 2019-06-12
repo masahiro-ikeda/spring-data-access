@@ -1,9 +1,8 @@
 package order.model.mapper;
 
-import order.model.dto.SalesHeadDto;
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+
+import order.model.dto.SalesHeadDto;
 
 @Mapper
 public interface SalesHeadMapper {
@@ -13,7 +12,6 @@ public interface SalesHeadMapper {
 	 *
 	 * @param head
 	 */
-	//@Insert("INSERT INTO sales_head (sales_no, customer_name, created_at ) VALUES (#{salesNo}, #{name}, #{createdAt})")
 	void insertHead(SalesHeadDto head);
 
 	/**
@@ -21,6 +19,5 @@ public interface SalesHeadMapper {
 	 *
 	 * @return 売上Noの最大値
 	 */
-	//@Select("SELECT MAX(sales_no) AS max_no FROM sales_head")
 	int getMaxSalesNo();
 }

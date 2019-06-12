@@ -16,7 +16,7 @@
     </insert>
     <select id="getMaxSalesNo" resultType="int">
         SELECT
-            MAX(sales_no) AS max_no
+            NVL(MAX(sales_no), 0) AS max_no
         FROM
             sales_head
     </select>

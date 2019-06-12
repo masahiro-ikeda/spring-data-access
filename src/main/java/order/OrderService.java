@@ -1,17 +1,16 @@
 package order;
 
-import java.sql.SQLException;
+import java.sql.Timestamp;
 
-import order.model.mapper.SalesHeadMapper;
-import order.model.mapper.SalesLineMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import order.model.dao.SalesLineDao;
 import order.model.dto.SalesHeadDto;
 import order.model.dto.SalesLineDto;
+import order.model.mapper.SalesHeadMapper;
+import order.model.mapper.SalesLineMapper;
 
 @Service
 public class OrderService {
@@ -37,6 +36,7 @@ public class OrderService {
 			SalesHeadDto hDto = new SalesHeadDto();
 			hDto.setSalesNo(salesNo);
 			hDto.setName(form.getName());
+			hDto.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 			hMapper.insertHead(hDto);
 
 			// LINEの登録①
@@ -45,6 +45,7 @@ public class OrderService {
 			orderHamburger.setItemNumber(form.getOrderHamburger());
 			orderHamburger.setSalesNo(salesNo);
 			orderHamburger.setSubNo(1);
+			orderHamburger.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 			lMapper.insertLine(orderHamburger);
 
 			// LINEの登録②
@@ -53,6 +54,7 @@ public class OrderService {
 			orderPotato.setItemNumber(form.getOrderPotato());
 			orderPotato.setSalesNo(salesNo);
 			orderPotato.setSubNo(2);
+			orderPotato.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 			lMapper.insertLine(orderPotato);
 
 			// LINEの登録③
@@ -61,6 +63,7 @@ public class OrderService {
 			orderCola.setItemNumber(form.getOrderCola());
 			orderCola.setSalesNo(salesNo);
 			orderCola.setSubNo(3);
+			orderCola.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 			lMapper.insertLine(orderCola);
 
 		} catch (DataAccessException e) {

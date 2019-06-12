@@ -25,7 +25,7 @@ public class OrderController {
 			service.executeOrder(order);
 			return "thanks";
 		} catch (RuntimeException e) {
-			return "error";
+			return "redirect:/error";
 		}
 	}
 }
