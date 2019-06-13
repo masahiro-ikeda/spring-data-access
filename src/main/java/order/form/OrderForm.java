@@ -1,4 +1,4 @@
-package order;
+package order.form;
 
 public class OrderForm {
 	private String name;
